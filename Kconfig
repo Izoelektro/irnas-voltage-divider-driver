@@ -1,0 +1,5 @@
+menu "irnas-voltage-divider-driver"
+
+rsource "drivers/Kconfig"
+
+endmenu

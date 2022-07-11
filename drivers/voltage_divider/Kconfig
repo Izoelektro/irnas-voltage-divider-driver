@@ -1,0 +1,21 @@
+# Copyright (c) 2021 Nordic Semiconductor ASA
+# SPDX-License-Identifier: Apache-2.0
+
+menuconfig VOLTAGE_DIVIDER
+	bool "voltage divider sampling driver"
+	depends on ADC
+	help
+	  Enable voltage divider driver
+
+if VOLTAGE_DIVIDER
+
+config VOLTAGE_DIVIDER_SHELL
+	bool "Enable shell commands for voltage divider"
+	depends on SHELL
+
+
+module = VOLTAGE_DIVIDER
+module-str = Voltage divider
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # VOLTAGE_DIVIDER
