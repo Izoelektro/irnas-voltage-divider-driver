@@ -1,11 +1,9 @@
 
-#include <zephyr.h>
 #include <device.h>
 #include <devicetree.h>
 #include <logging/log.h>
-
-#include <voltage_divider.h> 
-
+#include <voltage_divider.h>
+#include <zephyr.h>
 
 LOG_MODULE_REGISTER(main);
 
@@ -14,7 +12,7 @@ LOG_MODULE_REGISTER(main);
 void main(void)
 {
 	LOG_INF("Voltage divider test running on: %s", CONFIG_BOARD);
-	
+
 	const struct device *dev;
 	int err;
 
@@ -26,12 +24,15 @@ void main(void)
 	}
 
 	// take a sample
-	err = voltage_divider_sample(dev);
-	if (err < 0) {
-		LOG_ERR("voltage_divider_sample, err: %d", err);
-	}
-	else
-	{
-		LOG_INF("Voltage divider sample valeue: %d", err);
+	while (1) {
+
+		err = voltage_divider_sample(dev);
+		if (err < 0) {
+			LOG_ERR("voltage_divider_sample, err: %d", err);
+		} else {
+			LOG_INF("Voltage divider sample valeue: %d", err);
+		}
+
+		k_sleep(K_SECONDS(3));
 	}
 }
