@@ -63,7 +63,7 @@ static int voltage_divider_measure_enable_set(const struct device *dev,
 
 	int err = 0;
 
-	if (data->gpio) {
+	if (cfg->has_power_gpio) {
 		LOG_DBG("Seting gcp->pin (%d) to %d", gpio_chn_cfg->pin, state);
 		err = gpio_pin_set(data->gpio, gpio_chn_cfg->pin, state);
 		// if enabling, then wait a bit
@@ -135,8 +135,8 @@ static int divider_setup(const struct device *dev)
 		return -ENOENT;
 	}
 
-	// set up GPIO pin that enabled the voltage divider
-	if (gpio_chn_cfg->label) {
+	// set up GPIO pin that enables the voltage divider
+	if (cfg->has_power_gpio) {
 		data->gpio = device_get_binding(gpio_chn_cfg->label);
 		if (data->gpio == NULL) {
 			LOG_ERR("Failed to get GPIO %s", gpio_chn_cfg->label);
@@ -210,9 +210,9 @@ static int voltage_divider_init(const struct device *dev)
 			{                                                      \
 				DT_INST_IO_CHANNELS_INPUT(N),                  \
 			},                                                     \
-		IF_ENABLED(DT_NODE_HAS_PROP(N, power_gpios),                   \
+		IF_ENABLED(DT_INST_NODE_HAS_PROP(N, power_gpios),              \
 			   (.has_power_gpio = true, ))                         \
-			IF_ENABLED(DT_NODE_HAS_PROP(N, power_gpios),           \
+			IF_ENABLED(DT_INST_NODE_HAS_PROP(N, power_gpios),      \
 				   (.power_gpios =                             \
 					    {                                  \
 						    DT_INST_GPIO_LABEL(        \

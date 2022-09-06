@@ -22,7 +22,7 @@ If you already have a NCS setup you can follow these steps:
         repo-path: irnas-voltage-divider-driver
         path: irnas/irnas-voltage-divider-driver
         remote: irnas
-        revision: v1.0.0
+        revision: v1.0.1
     ```
 
 3. Then run `west update` in your freshly created bash/command prompt session.
