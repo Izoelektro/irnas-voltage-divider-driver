@@ -54,14 +54,11 @@ static void device_name_get(size_t idx, struct shell_static_entry *entry)
 SHELL_DYNAMIC_CMD_CREATE(dsub_device_name, device_name_get);
 
 // the help string for the get subcommand
-#define VD_GET_HELP                                                            \
-	"Take a voltage divider sample. Syntax:\n"                             \
-	"<device_name>"
+#define VD_GET_HELP "Take a voltage divider sample. Syntax:\n<device_name>"
 
 // all subcommands of command "voltage_divider"
 SHELL_STATIC_SUBCMD_SET_CREATE(sub_vd,
-			       SHELL_CMD_ARG(get, &dsub_device_name,
-					     VD_GET_HELP, cmd_vd_get, 2, 0),
+			       SHELL_CMD_ARG(get, &dsub_device_name, VD_GET_HELP, cmd_vd_get, 2, 0),
 			       SHELL_SUBCMD_SET_END);
 
 // this is the root level "voltage_divider" command,
