@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+-   west.yml, so samples can be built as stand alone.
+-   GitHub Action files for basic release process.
+
+### Changed
+
+-   The way how driver is configured in the device tree files, see 
+    `dts/bindings/irnas,voltage-divider.yaml` for more info. Additional propery 
+    for measuring internal vdd was added.
+-   No need to specify to set `CONFIG_VOLTAGE_DIVIDER` manually, this is now 
+    done automatically, if proper node is added.
+-   This driver can now be used in NCS `v2.2.0`.
+-   Formatting in source files.
+
 ## [v1.0.1]
 
 ### Fixed

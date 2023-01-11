@@ -1,43 +1,62 @@
 # irnas-voltage-divider-driver
 
-This repository contains driver and basic test for voltage divider driver, based on Zephyr Battery Voltage Measurement sample. Driver uses Zephyr ADC infrastructure to measure the voltage of the device power supply.
+This repository contains driver and basic test for voltage divider driver, based
+on Zephyr Battery Voltage Measurement sample. Driver uses Zephyr ADC
+infrastructure to measure the voltage of the device power supply.
 
-## Setup
+**IMPORTANT:** This driver is only suitable for Nordic chips, like `nrf52832`,
+`nrf52840` and so on. This is due to the chip specific way how adc channels are
+configured.
 
-Before using the driver, you will need to install nrF SDK. Driver is compatible with NCS 2.0.
+**IMPORTANT:** This driver hard codes adc gain, reference, `acquisition_time`,
+adc resolution and some other adc settings. This is done in
+`driver/voltage_divider/voltage_divider.c` in `voltage_divider_sample` function,
+see assignment of `data->adc_seq` and `data->adc_cfg` structs.
 
-If you already have a NCS setup you can follow these steps:
+## Usage
 
-1. To get the driver you need to update `<path to ncs>/ncs/nrf/west.yml`. First in the `remotes` section add:
+To use add below two snippets into your project's `west.yml` file and run `west
+update``:
 
-   ```yaml
-    - name: irnas
-      url-base: https://github.com/irnas
-   ```
+1. In `remotes` section, if not already added:
 
-2. Then in the `projects` section add at the bottom:
+```yaml
+- name: irnas
+  url-base: https://github.com/irnas
+```
 
-    ```yaml
-    - name: irnas-voltage-divider-driver
-        repo-path: irnas-voltage-divider-driver
-        path: irnas/irnas-voltage-divider-driver
-        remote: irnas
-        revision: v1.0.1
-    ```
+2. In the `projects` section, select revision you need:
 
-3. Then run `west update` in your freshly created bash/command prompt session.
-4. Above command will clone `irnas-voltage-divider-driver` repository inside of `ncs/irnas/`. You can now run samples inside it and use its voltage-divider driver code in your application projects.
-5. To use driver in your project, add DTS entry .dts or overlay file. For example:
+```yaml
+- name: irnas-voltage-divider-driver
+   repo-path: irnas-voltage-divider-driver
+   path: irnas/irnas-voltage-divider-driver
+   remote: irnas
+   revision: v2.0.0
+```
+
+### Device tree
+
+To enable this driver you need to add below snippet into your DTS or overlay
+file. For information on how to properly configure this driver see
+`dts/bindings/irnas,voltage-divider.yaml`
 
 ```dts
 vbatt {
-  label = "VBAT";
-  compatible = "irnas,voltage-divider";
-  io-channels = <&adc 0>;
-  output-ohms = <10000>;
-  full-ohms = <(10000 + 10000)>;
-  power-gpios = <&gpio0 7 GPIO_ACTIVE_HIGH>;
-  status = "okay";
+    compatible = "irnas,voltage-divider";
+    io-channels = <&adc 1>;
+    upper-resistor-ohms = <1000>;
+    lower-resistor-ohms = <1000>;
+    status = "okay";
 };
+```
 
+### Shell
+
+This driver also implements a shell interface for interacting with the voltage
+divider device instance. To add it to your existing shell add below line into
+your Kconfig fragment file:
+
+```
+CONFIG_VOLTAGE_DIVIDER_SHELL=y
 ```
