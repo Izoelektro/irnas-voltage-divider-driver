@@ -1,0 +1,10 @@
+/ {
+    vbatt {
+        compatible = "irnas,voltage-divider";
+        io-channels = <&adc 1>;
+        upper-resistor-ohms = <1000>;
+        lower-resistor-ohms = <1000>;
+        power-startup-delay-ms = <20>;
+        status = "okay";
+    };
+};
