@@ -3,6 +3,8 @@
 
 menuconfig VOLTAGE_DIVIDER
 	bool "voltage divider sampling driver"
+    default y
+    depends on DT_HAS_IRNAS_VOLTAGE_DIVIDER_ENABLED
 	depends on ADC
 	help
 	  Enable voltage divider driver

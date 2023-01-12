@@ -1,8 +1,7 @@
 #ifndef _VOLTAGE_DIVIDER_H_
 #define _VOLTAGE_DIVIDER_H_
 
-#include <device.h>
-#include <zephyr.h>
+#include <zephyr/device.h>
 
 /**
  * @brief Measure the voltage_divider voltage

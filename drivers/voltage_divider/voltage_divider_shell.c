@@ -4,12 +4,10 @@
  *
  */
 
-#include <zephyr.h>
-
-#include <device.h>
-#include <shell/shell.h>
-
 #include <voltage_divider.h>
+
+#include <zephyr/device.h>
+#include <zephyr/shell/shell.h>
 
 #include <stdlib.h>
 
@@ -17,17 +15,16 @@
 static int cmd_vd_get(const struct shell *shell, size_t argc, char **argv)
 {
 	const struct device *dev;
-	int err;
 
 	// get device binding
 	dev = device_get_binding(argv[1]);
-	if (dev == NULL) {
+	if (!dev) {
 		shell_error(shell, "Device unknown (%s)", argv[1]);
 		return -ENODEV;
 	}
 
 	// take a sample
-	err = voltage_divider_sample(dev);
+	int err = voltage_divider_sample(dev);
 	if (err < 0) {
 		shell_error(shell, "voltage_divider_sample, err: %d", err);
 		return -err;
@@ -42,7 +39,7 @@ static void device_name_get(size_t idx, struct shell_static_entry *entry)
 {
 	const struct device *dev = shell_device_lookup(idx, NULL);
 
-	entry->syntax = (dev != NULL) ? dev->name : NULL;
+	entry->syntax = dev ? dev->name : NULL;
 	entry->handler = NULL;
 	entry->help = NULL;
 	entry->subcmd = NULL;
@@ -54,14 +51,11 @@ static void device_name_get(size_t idx, struct shell_static_entry *entry)
 SHELL_DYNAMIC_CMD_CREATE(dsub_device_name, device_name_get);
 
 // the help string for the get subcommand
-#define VD_GET_HELP                                                            \
-	"Take a voltage divider sample. Syntax:\n"                             \
-	"<device_name>"
+#define VD_GET_HELP "Take a voltage divider sample. Syntax:\n<device_name>"
 
 // all subcommands of command "voltage_divider"
 SHELL_STATIC_SUBCMD_SET_CREATE(sub_vd,
-			       SHELL_CMD_ARG(get, &dsub_device_name,
-					     VD_GET_HELP, cmd_vd_get, 2, 0),
+			       SHELL_CMD_ARG(get, &dsub_device_name, VD_GET_HELP, cmd_vd_get, 2, 0),
 			       SHELL_SUBCMD_SET_END);
 
 // this is the root level "voltage_divider" command,
